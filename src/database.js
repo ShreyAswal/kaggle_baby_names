@@ -45,4 +45,4 @@ sequelize.authenticate()
   await BabyName.sync();
 
 
-export default sequelize;
+export default {BabyName,sequelize};
