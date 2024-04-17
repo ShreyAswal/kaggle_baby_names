@@ -10,7 +10,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 import Sequelize from 'sequelize';
 
 // Database configuration
-console.log("DB name: "+process.env.DB_NAME);
+// console.log("DB name: "+process.env.DB_NAME);
 const dbConfig = {
     database: process.env.DB_NAME,
     username: process.env.DB_USER,
@@ -45,4 +45,4 @@ sequelize.authenticate()
   await BabyName.sync();
 
 
-export default {BabyName,sequelize};
+export {BabyName,sequelize};
