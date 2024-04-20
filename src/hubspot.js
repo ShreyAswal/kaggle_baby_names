@@ -13,38 +13,44 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 // Function to send data to HubSpot
 async function sendToHubSpot(records) {
   const API_KEY = process.env.API_KEY;
-  const endpoint = "https://api.hubapi.com/crm/v3/objects/contacts";
+  const baseUrl = "https://api.hubapi.com";
+  const endpoint = `${baseUrl}/crm/v3/objects/contacts/batch/create`; // Update endpoint for batch creation
 
   try {
+    
+
     // Split records into batches
     const batchSize = 10000; // Adjust batch size as needed
     const batches = [];
-    
+
     // Split records into batches
     for (let i = 0; i < records.length; i += batchSize) {
       const batch = records.slice(i, i + batchSize);
       batches.push(batch);
     }
-  
+
     try {
       // Iterate over batches
       for (const batch of batches) {
-        const requestData = batch.map(record => ({
+        const requestData = batch.map((record) => ({
           properties: {
-            "firstname": record.name,
-            "sex": record.sex,
-            // Add other properties as needed
-          }
-        }));
-  
-        // Make an HTTP POST request to create contacts in batch
-        const response = await axios.post(endpoint, { inputs: requestData }, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${API_KEY}`,
+            firstname: record.name,
+            sex: record.sex,
           },
-        });
-  
+        }));
+
+        // Make an HTTP POST request to create contacts in batch
+        const response = await axios.post(
+          endpoint,
+          { inputs: requestData },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${API_KEY}`,
+            },
+          }
+        );
+
         console.log("Batch created:", response.data);
       }
     } catch (error) {
@@ -54,6 +60,5 @@ async function sendToHubSpot(records) {
     console.error("Error sending data to HubSpot:", error);
   }
 }
-
 
 export { sendToHubSpot };
