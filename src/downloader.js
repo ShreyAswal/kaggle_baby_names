@@ -46,7 +46,7 @@ const downloadFile = async () => {
     // Download the CSV file
     console.log("Downloading dataset...");
     const button = await page.waitForSelector(
-      "div.hPDFOD i[role='button']",
+      "div.sc-dmXMPJ.eSPtWr i[role='button']",
       { visible: true } // Wait for the element to become visible
     );
 
