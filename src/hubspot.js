@@ -20,13 +20,16 @@ async function sendToHubSpot(records) {
     
 
     // Split records into batches
-    const batchSize = 10000; // Adjust batch size as needed
+    const batchSize = 100; // Adjust batch size as needed to avoid rate limiting
     const batches = [];
+    let batchIteration = 0;
 
     // Split records into batches
     for (let i = 0; i < records.length; i += batchSize) {
       const batch = records.slice(i, i + batchSize);
       batches.push(batch);
+      batchIteration++;
+      console.log(`Batch ${batchIteration} created with ${batch.length} records`);
     }
 
     try {
@@ -51,7 +54,7 @@ async function sendToHubSpot(records) {
           }
         );
 
-        console.log("Batch created:", response.data);
+        // console.log("Batch created:", response.data);
       }
     } catch (error) {
       console.error("Error creating contacts:", error);
@@ -62,3 +65,6 @@ async function sendToHubSpot(records) {
 }
 
 export { sendToHubSpot };
+
+// Already filled Contacts = 3705 before sending to final-Kaggle-baby-Name
+// Target no of API call's for 1858689 records = 18587

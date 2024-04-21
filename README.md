@@ -16,3 +16,7 @@ Day-3
 - Accessed the downloaded file using Admzip and stored content in SQL DB
 - Got familiar with hubspot and created an account
 - Sending multiple contacts to hubspot(blocker)
+
+Day-4
+- Blocked for a while on why the post request doesn't work
+- Finally able to POST data in a batch of 100 FROM SQL to hubspot :)
