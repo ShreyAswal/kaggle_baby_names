@@ -22,8 +22,10 @@ const downloadFile = async () => {
 
     // });
 
+    // browser context is a container for a set of pages and cookies
     const context = await browser.newContext();
 
+    // Create a new page in the browser context
     const page = await context.newPage(); // Create a new page in the browser context
 
     // Simulate login to Kaggle
@@ -59,7 +61,6 @@ const downloadFile = async () => {
 
     // Wait for the download process to complete and obtain the Download object
     const download = await downloadPromise;
-    // console.log("download.path: "+download.path);
 
     // // Wait for the download to complete
     await download.saveAs("C:/Users/world/Downloads/baby_names_data2.zip");
@@ -68,21 +69,22 @@ const downloadFile = async () => {
 
     await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait for 5 seconds
 
+    // Consume system resources if not closed
     await page.close();
     await context.close();
     await browser.close();
 
-    const filePath =
-      "C:/Users/world/Downloads/baby_names_data2/babyNamesUSYOB-full.csv"; // Example file path
+    // const filePath =
+    //   "C:/Users/world/Downloads/baby_names_data2/babyNamesUSYOB-full.csv"; // Example file path
 
-    return filePath;
+    // return filePath;
   } catch (error) {
     console.log("Error in downloader: " + error);
     throw error; // Re-throw the error to handle it in the caller function
   }
 };
 
-// Invoke the downloadFile function
+// Invoke the downloadFile function and handle the result or error of the promise
 downloadFile()
-  .then((filePath) => console.log("File downloaded successfully:", filePath))
+  .then(() => console.log("File downloaded successfully"))
   .catch((error) => console.error("Error downloading file:", error));

@@ -14,7 +14,6 @@ const __dirname = dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 // Database configuration
-// console.log("DB name: "+process.env.DB_NAME);
 const dbConfig = {
   database: process.env.DB_NAME,
   username: process.env.DB_USER,
@@ -23,10 +22,10 @@ const dbConfig = {
   dialect: "mysql",
 };
 
-// Initialize Sequelize
+// Initialize Sequelize - connect to the database using the configuration
 const sequelize = new Sequelize(dbConfig);
 
-// Define the BabyName model
+// Define the BabyName model 
 const BabyName = sequelize.define("BabyName", {
   name: {
     type: Sequelize.STRING,
@@ -38,7 +37,7 @@ const BabyName = sequelize.define("BabyName", {
   },
 });
 
-// Test the connection
+// Test the connection 
 sequelize
   .authenticate()
   .then(() => console.log("Connection has been established successfully."))
@@ -47,7 +46,22 @@ sequelize
 // This creates the table in the database if it doesn't already exist
 // Using force: true will drop the existing table and recreate it
 await BabyName.sync({ force: true });
+
+// For only fetching data directly from database
 // await BabyName.sync();
+
+//  // Retrieve inserted records from the database and send them to HubSpot
+//  const insertedRecords = await BabyName.findAll();
+//  console.log("Inserted records:", insertedRecords.length);
+
+//  // Extract relevant data from Sequelize instances
+//  const formattedData = insertedRecords.map((record) => ({
+//    name: record.name, //  'name' is the property for first name
+//    sex: record.sex, //  'sex' is the property for sex
+//  }));
+
+//  console.log("formattedData length: " + formattedData.length);
+//  sendToHubSpot(formattedData);
 
 const zipFilePath = "C:/Users/world/Downloads/baby_names_data2.zip"; // Path to the ZIP file
 const targetDir = "C:/Users/world/Downloads/baby_names_data2"; // Directory where the files will be extracted
@@ -60,7 +74,7 @@ zip.extractAllTo(targetDir, true); // Extract the contents of the ZIP file to th
 const csvFilePath = path.join(targetDir, "babyNamesUSYOB-full.csv"); // Path to the extracted CSV file
 console.log("CSV file path:", csvFilePath);
 
-// Read the CSV file and insert records into the database
+// Array to store data to insert into the database
 const dataToInsert = [];
 const LIMIT = 10000; // Set the limit to 1000
 
@@ -101,14 +115,6 @@ fs.createReadStream(csvFilePath)
       sex: record.sex, //  'sex' is the property for sex
     }));
 
-    // Format to see the data of each record
-    // formattedData.forEach((data, index) => {
-    //   console.log(`Record ${index + 1}:`);
-    //   console.log("Name:", data.name);
-    //   console.log("Sex:", data.sex);
-    // });
-    // console.log("formattedData: " + formattedData);
-
     console.log("formattedData length: " + formattedData.length);
     sendToHubSpot(formattedData);
 
@@ -124,7 +130,10 @@ fs.createReadStream(csvFilePath)
     sequelize.close();
   });
 
-export { BabyName, sequelize };
+// export { BabyName, sequelize };
+
+
+
 
 // total in excel = 1048576
 
